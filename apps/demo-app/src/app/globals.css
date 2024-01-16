@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -50,7 +49,6 @@
   }
 }
 
-
 @layer base {
   * {
     @apply border-border;
@@ -73,4 +71,3 @@ select:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px #000 inset;
   transition: background-color 5000s ease-in-out 0s;
 }
-

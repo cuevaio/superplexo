@@ -1,14 +1,13 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { cn } from "@superplexo/utils/cn"
+import { cn } from "@superplexo/utils/cn";
 import { Providers } from "./providers";
 
 const fontSans = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
-
 
 export const metadata: Metadata = {
   title: "Create Turborepo",
