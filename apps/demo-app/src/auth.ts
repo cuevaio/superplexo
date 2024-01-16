@@ -21,4 +21,3 @@ export const {
 } = nextAuth;
 
 export const auth = () => nextAuth.auth();
-

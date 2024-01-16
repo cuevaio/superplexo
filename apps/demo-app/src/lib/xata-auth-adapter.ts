@@ -70,9 +70,7 @@ export function XataAdapter(): Adapter {
       if (!connectedAccount) {
         return;
       }
-      let deleted = await client.db.users_accounts.delete(
-        connectedAccount.id
-      );
+      let deleted = await client.db.users_accounts.delete(connectedAccount.id);
       return deleted ? (deleted as unknown as AdapterAccount) : undefined;
     },
     async createSession(initialSession) {
@@ -168,4 +166,3 @@ export function XataAdapter(): Adapter {
     },
   };
 }
-

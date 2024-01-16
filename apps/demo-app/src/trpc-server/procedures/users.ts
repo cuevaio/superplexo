@@ -26,4 +26,3 @@ export const userProcedures = {
       return updatedUser;
     }),
 };
-

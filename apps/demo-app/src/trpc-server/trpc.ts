@@ -33,4 +33,3 @@ export const protectedProcedure = t.procedure.use(async (opts) => {
     .getFirstOrThrow();
   return opts.next({ ...opts, ctx: { ...opts.ctx, user } });
 });
-

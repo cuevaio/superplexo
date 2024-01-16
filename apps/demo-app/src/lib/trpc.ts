@@ -3,4 +3,3 @@ import { type AppRouter } from "@/trpc-server";
 
 export const trpc: ReturnType<typeof createTRPCReact<AppRouter>> =
   createTRPCReact<AppRouter>({});
-
