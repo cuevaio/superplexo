@@ -1,5 +1,5 @@
 {
-  "extends": "@superplexo/typescript-config/react-library.json",
+  "extends": "@superplexo/typescript-config/base.json",
   "compilerOptions": {
     "outDir": "dist"
   },

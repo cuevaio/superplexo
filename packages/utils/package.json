@@ -1,0 +1,21 @@
+{
+  "name": "@superplexo/utils",
+  "version": "0.0.1",
+  "exports": {
+    "./cn": "./src/cn.ts",
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0"
+  },
+  "devDependencies": {
+    "@superplexo/eslint-config": "workspace:*",
+    "@superplexo/typescript-config": "workspace:*",
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^2.1.0",
+    "@types/node": "^20.5.2",
+    "@types/eslint": "^8.44.7",
+    "eslint": "^8.53.0",
+    "typescript": "^5.2.2"
+  }
+}

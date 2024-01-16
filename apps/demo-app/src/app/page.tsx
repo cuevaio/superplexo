@@ -1,7 +1,10 @@
-import { auth } from "@/auth";
+"use client";
 
-export default async function Page() {
-  let data = await auth();
+import { trpc } from "@/lib/trpc";
+import { Button } from "@superplexo/ui/button";
+
+export default function Page() {
+  let { data } = trpc.getUser.useQuery();
 
   return (
     <div>
@@ -9,6 +12,9 @@ export default async function Page() {
         <code>{JSON.stringify(data, null, 2)}</code>
       </pre>
       <p>hello</p>
+
+
+      <Button>hello</Button>
     </div>
   );
 }

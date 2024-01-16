@@ -1,8 +1,14 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { cn } from "@superplexo/utils/cn"
+import { Providers } from "./providers";
 
-const inter = Inter({ subsets: ["latin"] });
+const fontSans = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
 
 export const metadata: Metadata = {
   title: "Create Turborepo",
@@ -16,7 +22,11 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body
+        className={cn("bg-background font-sans antialiased", fontSans.variable)}
+      >
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
