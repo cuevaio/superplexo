@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://superplexo-t1ubk3.us-east-1.xata.sh/db/superplexo",
+  "codegen": {
+    "output": "src/lib/xata.ts"
+  }
+}
