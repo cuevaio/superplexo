@@ -1,3 +1,6 @@
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+
 interface LayoutProps {
   user: React.ReactNode;
   header: React.ReactNode;
@@ -5,7 +8,12 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-const Layout = ({ user, header, sidebar, children }: LayoutProps) => {
+const Layout = async ({ user, header, sidebar, children }: LayoutProps) => {
+  let session = await auth();
+  if (!session?.user) {
+    redirect("/api/auth/signin");
+  }
+
   return (
     <div className="h-screen w-screen flex flex-col">
       <div className="flex w-full border-b">
