@@ -144,7 +144,7 @@ export function ProjectCombobox(props: Props) {
       </PopoverContent>
       <div className="hidden">
         <input
-          name="projects"
+          name={props.placeholder}
           value={
             selectedSlugs.length && selectedSlugs.length > 0
               ? selectedSlugs.join(",")
@@ -153,12 +153,7 @@ export function ProjectCombobox(props: Props) {
           onChange={(e) => setSelectedSlugs(e.target.value.split(","))}
           className="hidden"
         />
-        <input
-          name="project"
-          value={selectedSlugs[0] || ""}
-          onChange={(e) => setSelectedSlugs(e.target.value.split(","))}
-          className="hidden"
-        />
+
       </div>
     </Popover>
   );

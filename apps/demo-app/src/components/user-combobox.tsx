@@ -144,18 +144,12 @@ export function UserCombobox(props: Props) {
       </PopoverContent>
       <div className="hidden">
         <input
-          name="users"
+          name={props.placeholder}
           value={
             selectedEmails.length && selectedEmails.length > 0
               ? selectedEmails.join(",")
               : ""
           }
-          onChange={(e) => setSelectedEmails(e.target.value.split(","))}
-          className="hidden"
-        />
-        <input
-          name="user"
-          value={selectedEmails[0] || ""}
           onChange={(e) => setSelectedEmails(e.target.value.split(","))}
           className="hidden"
         />

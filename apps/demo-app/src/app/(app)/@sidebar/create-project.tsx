@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -16,21 +17,21 @@ import { Input } from "@superplexo/ui/input";
 import { Button } from "@superplexo/ui/button";
 import { trpc } from "@/lib/trpc";
 import { UserCombobox } from "@/components/user-combobox";
-import { ProjectCombobox } from "@/components/project-combobox";
 import { PlusIcon } from "lucide-react";
+import { TeamCombobox } from "@/components/team-combobox";
+import { Textarea } from "@superplexo/ui/textarea";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
 
-export const CreateTeam = () => {
+export const CreateProject = () => {
   let [dialogOpen, setDialogOpen] = React.useState(false);
-
   let queryClient = useQueryClient();
-  let listAllTeamsKey = getQueryKey(trpc.listAllTeams);
+  let listAllProjectsKey = getQueryKey(trpc.listAllProjects);
 
- let createTeam = trpc.createTeam.useMutation({
+  let createProject = trpc.createProject.useMutation({
     onSuccess: () => {
       setDialogOpen(false);
-      queryClient.invalidateQueries(listAllTeamsKey);
+      queryClient.invalidateQueries(listAllProjectsKey);
     },
   });
 
@@ -38,22 +39,28 @@ export const CreateTeam = () => {
     event.preventDefault();
     let form = event.target as HTMLFormElement;
     let formData = new FormData(form);
-    let teamName = formData.get("teamName");
-    if (!teamName) {
+    let projectName = formData.get("projectName");
+    if (!projectName) {
       // TODO: Toast error
       return;
     }
 
+    let projectDescription = formData.get("projectDescription");
+    let leadEmail = formData.get("Lead");
     let memberEmails = formData.get("Members");
-    let projectSlugs = formData.get("Projects");
+    let teamSlugs = formData.get("Teams");
 
-    createTeam.mutate({
-      teamName: teamName.toString(),
+    createProject.mutate({
+      projectName: projectName.toString(),
       memberEmails: memberEmails
         ? memberEmails.toString().split(",")
         : undefined,
-      projectSlugs: projectSlugs
-        ? projectSlugs.toString().split(",")
+      teamSlugs: teamSlugs
+        ? teamSlugs.toString().split(",")
+        : undefined,
+      leadEmail: leadEmail ? leadEmail.toString() : undefined,
+      projectDescription: projectDescription
+        ? projectDescription.toString()
         : undefined,
     });
   };
@@ -65,16 +72,18 @@ export const CreateTeam = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create Team</DialogTitle>
+          <DialogTitle>Create Project</DialogTitle>
           <DialogDescription>
-            Create a new team to collaborate with your friends.
+            Create a new project to collaborate with your friends.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input name="teamName" placeholder="Team name" required />
+          <Input name="projectName" placeholder="Project name" required />
+          <Textarea name="projectDescription" placeholder="Project description" />
           <div className="flex flex-row space-x-4">
+            <UserCombobox placeholder="Lead" multiple={false} />
             <UserCombobox placeholder="Members" multiple={true} />
-            <ProjectCombobox placeholder="Projects" multiple={true} />
+            <TeamCombobox placeholder="Teams" multiple={true} />
           </div>
           <DialogFooter>
             <Button

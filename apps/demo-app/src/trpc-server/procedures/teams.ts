@@ -63,7 +63,9 @@ export const teamsProcedures = {
 
   listAllTeams: protectedProcedure
     .query(async () => {
-      return await xata.db.teams.getAll();
+      return await xata.db.teams
+        .sort("name", "asc")
+        .getAll();
     }
     )
 };

@@ -6,12 +6,16 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@superplexo/ui/tabs";
 import { ScrollArea } from "@superplexo/ui/scroll-area";
 import { Button } from "@superplexo/ui/button";
 import React from "react";
+import { CreateProject } from "./create-project";
 
 const Sidebar = () => {
   let [value, setValue] = React.useState("teams");
+
   let listAllProjects = trpc.listAllProjects.useQuery();
   let projects = listAllProjects.data || []
 
+  let listAllTeams = trpc.listAllTeams.useQuery();
+  let teams = listAllTeams.data || []
 
   return (
     <div className="flex flex-col h-full">
@@ -23,9 +27,19 @@ const Sidebar = () => {
             <TabsTrigger value="projects">Projects</TabsTrigger>
           </TabsList>
           {value === "teams" && <CreateTeam />}
+          {value === "projects" && <CreateProject />}
         </div>
-        <TabsContent value="teams" className="grow">
-          <div className="h-full w-full" >Teams</div>
+        <TabsContent value="teams" className="">
+       <ScrollArea className="h-[500px]">
+            <div className="pr-4">
+              {teams.map((team) => (
+                <div key={team.id}>
+                  <Button variant="ghost" className="w-full h-min py-2 justify-start">{team.name}</Button>
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+
         </TabsContent>
         <TabsContent value="projects" className="">
           <ScrollArea className="h-[500px]">

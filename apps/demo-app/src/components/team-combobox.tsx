@@ -145,18 +145,12 @@ export function TeamCombobox(props: Props) {
       </PopoverContent>
       <div className="hidden">
         <input
-          name="teams"
+          name={props.placeholder}
           value={
             selectedSlugs.length && selectedSlugs.length > 0
               ? selectedSlugs.join(",")
               : ""
           }
-          onChange={(e) => setSelectedSlugs(e.target.value.split(","))}
-          className="hidden"
-        />
-        <input
-          name="team"
-          value={selectedSlugs[0] || ""}
           onChange={(e) => setSelectedSlugs(e.target.value.split(","))}
           className="hidden"
         />

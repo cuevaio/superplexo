@@ -27,6 +27,7 @@ const tables = [
       { column: "user", table: "sessions" },
       { column: "lead", table: "projects" },
       { column: "member", table: "team_member_rels" },
+      { column: "member", table: "project_member_rels" },
     ],
   },
   {
@@ -108,7 +109,10 @@ const tables = [
       { name: "endedAt", type: "datetime" },
       { name: "slug", type: "string", unique: true },
     ],
-    revLinks: [{ column: "project", table: "team_project_rels" }],
+    revLinks: [
+      { column: "project", table: "team_project_rels" },
+      { column: "project", table: "project_member_rels" },
+    ],
   },
   {
     name: "team_member_rels",
@@ -122,6 +126,13 @@ const tables = [
     columns: [
       { name: "team", type: "link", link: { table: "teams" } },
       { name: "project", type: "link", link: { table: "projects" } },
+    ],
+  },
+  {
+    name: "project_member_rels",
+    columns: [
+      { name: "project", type: "link", link: { table: "projects" } },
+      { name: "member", type: "link", link: { table: "users" } },
     ],
   },
 ] as const;
@@ -159,6 +170,9 @@ export type TeamMemberRelsRecord = TeamMemberRels & XataRecord;
 export type TeamProjectRels = InferredTypes["team_project_rels"];
 export type TeamProjectRelsRecord = TeamProjectRels & XataRecord;
 
+export type ProjectMemberRels = InferredTypes["project_member_rels"];
+export type ProjectMemberRelsRecord = ProjectMemberRels & XataRecord;
+
 export type DatabaseSchema = {
   users: UsersRecord;
   accounts: AccountsRecord;
@@ -170,6 +184,7 @@ export type DatabaseSchema = {
   projects: ProjectsRecord;
   team_member_rels: TeamMemberRelsRecord;
   team_project_rels: TeamProjectRelsRecord;
+  project_member_rels: ProjectMemberRelsRecord;
 };
 
 const DatabaseClient = buildClient();
