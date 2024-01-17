@@ -19,7 +19,7 @@ const Sidebar = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-none h-[300px] bg-red-200">Sidebar</div>
+      <div className="flex-none h-[300px]">Sidebar</div>
       <Tabs value={value} onValueChange={setValue} className="">
         <div className="w-full flex space-x-4">
           <TabsList className="grid w-full grid-cols-2">
