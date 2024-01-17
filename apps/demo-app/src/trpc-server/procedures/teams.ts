@@ -4,8 +4,8 @@ import { protectedProcedure } from "../trpc";
 import { getXataClient } from "@/lib/xata";
 let xata = getXataClient();
 
-export const projectsProcedures = {
-  createProject: protectedProcedure
+export const teamsProcedures = {
+  createTeam: protectedProcedure
     .input(
       z.object({
         teamName: z.string(),
@@ -60,9 +60,4 @@ export const projectsProcedures = {
 
       return team;
     }),
-
-  listAllProjects: protectedProcedure.query(async () => {
-    let projects = await xata.db.projects.getAll();
-    return projects;
-  }),
 };
