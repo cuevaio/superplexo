@@ -17,6 +17,7 @@ import { Button } from "@superplexo/ui/button";
 import { trpc } from "@/lib/trpc";
 import { UserCombobox } from "@/components/user-combobox";
 import { ProjectCombobox } from "@/components/project-combobox";
+import { PlusIcon } from "lucide-react";
 
 export const CreateTeam = () => {
   let [dialogOpen, setDialogOpen] = React.useState(false);
@@ -53,7 +54,7 @@ export const CreateTeam = () => {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button>Create Team</Button>
+        <Button size="icon" variant="ghost"><PlusIcon className="h-4 w-4" /></Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
