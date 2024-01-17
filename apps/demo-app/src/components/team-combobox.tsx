@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -116,10 +115,7 @@ export function TeamCombobox(props: Props) {
                             );
                           } else {
                             if (props.multiple) {
-                              setSelectedSlugs([
-                                ...selectedSlugs,
-                                team.slug,
-                              ]);
+                              setSelectedSlugs([...selectedSlugs, team.slug]);
                             } else {
                               setSelectedSlugs([team.slug]);
                             }

@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -55,9 +54,7 @@ export const CreateProject = () => {
       memberEmails: memberEmails
         ? memberEmails.toString().split(",")
         : undefined,
-      teamSlugs: teamSlugs
-        ? teamSlugs.toString().split(",")
-        : undefined,
+      teamSlugs: teamSlugs ? teamSlugs.toString().split(",") : undefined,
       leadEmail: leadEmail ? leadEmail.toString() : undefined,
       projectDescription: projectDescription
         ? projectDescription.toString()
@@ -68,7 +65,9 @@ export const CreateProject = () => {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button size="icon" variant="ghost"><PlusIcon className="h-4 w-4" /></Button>
+        <Button size="icon" variant="ghost">
+          <PlusIcon className="h-4 w-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -79,7 +78,10 @@ export const CreateProject = () => {
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input name="projectName" placeholder="Project name" required />
-          <Textarea name="projectDescription" placeholder="Project description" />
+          <Textarea
+            name="projectDescription"
+            placeholder="Project description"
+          />
           <div className="flex flex-row space-x-4">
             <UserCombobox placeholder="Lead" multiple={false} />
             <UserCombobox placeholder="Members" multiple={true} />

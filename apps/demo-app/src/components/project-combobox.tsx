@@ -153,7 +153,6 @@ export function ProjectCombobox(props: Props) {
           onChange={(e) => setSelectedSlugs(e.target.value.split(","))}
           className="hidden"
         />
-
       </div>
     </Popover>
   );

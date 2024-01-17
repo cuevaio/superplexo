@@ -27,7 +27,7 @@ export const CreateTeam = () => {
   let queryClient = useQueryClient();
   let listAllTeamsKey = getQueryKey(trpc.listAllTeams);
 
- let createTeam = trpc.createTeam.useMutation({
+  let createTeam = trpc.createTeam.useMutation({
     onSuccess: () => {
       setDialogOpen(false);
       queryClient.invalidateQueries(listAllTeamsKey);
@@ -61,7 +61,9 @@ export const CreateTeam = () => {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button size="icon" variant="ghost"><PlusIcon className="h-4 w-4" /></Button>
+        <Button size="icon" variant="ghost">
+          <PlusIcon className="h-4 w-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

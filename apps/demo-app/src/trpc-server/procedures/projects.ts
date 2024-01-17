@@ -17,7 +17,13 @@ export const projectsProcedures = {
     )
     .mutation(async (opts) => {
       const {
-        input: { projectName, projectDescription, memberEmails, teamSlugs, leadEmail },
+        input: {
+          projectName,
+          projectDescription,
+          memberEmails,
+          teamSlugs,
+          leadEmail,
+        },
       } = opts;
 
       let projectSlug: string =
@@ -26,53 +32,56 @@ export const projectsProcedures = {
         Math.random().toString(36).substring(2, 8);
 
       let [members, teams, lead] = await Promise.all([
-        memberEmails?.length ?
-          memberEmails.length > 0 ?
-            xata.db.users.filter({ email: { $any: memberEmails } }).getAll() : undefined : undefined,
+        memberEmails?.length
+          ? memberEmails.length > 0
+            ? xata.db.users.filter({ email: { $any: memberEmails } }).getAll()
+            : undefined
+          : undefined,
 
-        teamSlugs?.length ?
-          teamSlugs.length > 0 ?
-            xata.db.teams.filter({ slug: { $any: teamSlugs } }).getAll() : undefined : undefined,
+        teamSlugs?.length
+          ? teamSlugs.length > 0
+            ? xata.db.teams.filter({ slug: { $any: teamSlugs } }).getAll()
+            : undefined
+          : undefined,
 
-        leadEmail ?
-          xata.db.users.filter({ email: leadEmail }).getFirst() : undefined
+        leadEmail
+          ? xata.db.users.filter({ email: leadEmail }).getFirst()
+          : undefined,
       ]);
 
       let project = await xata.db.projects.create({
         name: projectName,
         description: projectDescription,
         slug: projectSlug,
-        lead: lead?.id
+        lead: lead?.id,
       });
 
       await Promise.all([
         members &&
-        xata.db.project_member_rels.create(
-          members.map((member) => {
-            return {
-              project: project.id,
-              member: member.id,
-            };
-          })
-        ),
+          xata.db.project_member_rels.create(
+            members.map((member) => {
+              return {
+                project: project.id,
+                member: member.id,
+              };
+            })
+          ),
         teams &&
-        xata.db.team_project_rels.create(
-          teams.map((team) => {
-            return {
-              team: team.id,
-              project: project.id,
-            };
-          })
-        ),
+          xata.db.team_project_rels.create(
+            teams.map((team) => {
+              return {
+                team: team.id,
+                project: project.id,
+              };
+            })
+          ),
       ]);
 
       return project;
     }),
 
   listAllProjects: protectedProcedure.query(async () => {
-    let projects = await xata.db.projects
-      .sort("name", "asc")
-      .getAll();
+    let projects = await xata.db.projects.sort("name", "asc").getAll();
     return projects;
   }),
 };

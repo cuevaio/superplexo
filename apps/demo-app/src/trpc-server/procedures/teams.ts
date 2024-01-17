@@ -25,11 +25,11 @@ export const teamsProcedures = {
 
       let [members, projects] = await Promise.all([
         memberEmails?.length &&
-        memberEmails.length > 0 &&
-        xata.db.users.filter({ email: { $any: memberEmails } }).getAll(),
+          memberEmails.length > 0 &&
+          xata.db.users.filter({ email: { $any: memberEmails } }).getAll(),
         projectSlugs?.length &&
-        projectSlugs.length > 0 &&
-        xata.db.projects.filter({ slug: { $any: projectSlugs } }).getAll(),
+          projectSlugs.length > 0 &&
+          xata.db.projects.filter({ slug: { $any: projectSlugs } }).getAll(),
       ]);
 
       let team = await xata.db.teams.create({
@@ -39,33 +39,29 @@ export const teamsProcedures = {
 
       await Promise.all([
         members &&
-        xata.db.team_member_rels.create(
-          members.map((member) => {
-            return {
-              team: team.id,
-              member: member.id,
-            };
-          })
-        ),
+          xata.db.team_member_rels.create(
+            members.map((member) => {
+              return {
+                team: team.id,
+                member: member.id,
+              };
+            })
+          ),
         projects &&
-        xata.db.team_project_rels.create(
-          projects.map((project) => {
-            return {
-              team: team.id,
-              project: project.id,
-            };
-          })
-        ),
+          xata.db.team_project_rels.create(
+            projects.map((project) => {
+              return {
+                team: team.id,
+                project: project.id,
+              };
+            })
+          ),
       ]);
 
       return team;
     }),
 
-  listAllTeams: protectedProcedure
-    .query(async () => {
-      return await xata.db.teams
-        .sort("name", "asc")
-        .getAll();
-    }
-    )
+  listAllTeams: protectedProcedure.query(async () => {
+    return await xata.db.teams.sort("name", "asc").getAll();
+  }),
 };

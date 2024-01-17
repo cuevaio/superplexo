@@ -12,10 +12,10 @@ const Sidebar = () => {
   let [value, setValue] = React.useState("teams");
 
   let listAllProjects = trpc.listAllProjects.useQuery();
-  let projects = listAllProjects.data || []
+  let projects = listAllProjects.data || [];
 
   let listAllTeams = trpc.listAllTeams.useQuery();
-  let teams = listAllTeams.data || []
+  let teams = listAllTeams.data || [];
 
   return (
     <div className="flex flex-col h-full">
@@ -30,23 +30,32 @@ const Sidebar = () => {
           {value === "projects" && <CreateProject />}
         </div>
         <TabsContent value="teams" className="">
-       <ScrollArea className="h-[500px]">
+          <ScrollArea className="h-[500px]">
             <div className="pr-4">
               {teams.map((team) => (
                 <div key={team.id}>
-                  <Button variant="ghost" className="w-full h-min py-2 justify-start">{team.name}</Button>
+                  <Button
+                    variant="ghost"
+                    className="w-full h-min py-2 justify-start"
+                  >
+                    {team.name}
+                  </Button>
                 </div>
               ))}
             </div>
           </ScrollArea>
-
         </TabsContent>
         <TabsContent value="projects" className="">
           <ScrollArea className="h-[500px]">
             <div className="pr-4">
               {projects.map((project) => (
                 <div key={project.id}>
-                  <Button variant="ghost" className="w-full h-min py-2 justify-start">{project.name}</Button>
+                  <Button
+                    variant="ghost"
+                    className="w-full h-min py-2 justify-start"
+                  >
+                    {project.name}
+                  </Button>
                 </div>
               ))}
             </div>
