@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, FolderKanbanIcon, LayoutGridIcon } from "lucide-react";
+import { Check,  HeartHandshakeIcon, WaypointsIcon } from "lucide-react";
 
 import { cn } from "@superplexo/utils";
 import { Button } from "@superplexo/ui/button";
@@ -57,7 +57,7 @@ export function TeamCombobox(props: Props) {
     }
   }
 
-  let Icon = props.multiple ? LayoutGridIcon : FolderKanbanIcon;
+  let Icon = props.multiple ? WaypointsIcon : HeartHandshakeIcon;
 
   return (
     <Popover open={open} onOpenChange={setOpen} modal={true}>

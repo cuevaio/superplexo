@@ -7,7 +7,7 @@ import { ScrollArea } from "@superplexo/ui/scroll-area";
 import { Button } from "@superplexo/ui/button";
 import React from "react";
 import { CreateProject } from "./create-project";
-import { DnaIcon, RocketIcon } from "lucide-react";
+import { FolderKanbanIcon, HeartHandshakeIcon, LayoutGridIcon, WaypointsIcon } from "lucide-react";
 
 const Sidebar = () => {
   let [value, setValue] = React.useState("teams");
@@ -24,8 +24,12 @@ const Sidebar = () => {
       <Tabs value={value} onValueChange={setValue} className="">
         <div className="w-full flex space-x-4">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="teams">Teams</TabsTrigger>
-            <TabsTrigger value="projects">Projects</TabsTrigger>
+            <TabsTrigger value="teams">
+              <WaypointsIcon className="w-4 h-4 mr-2" />
+              Teams</TabsTrigger>
+            <TabsTrigger value="projects">
+              <LayoutGridIcon className="w-4 h-4 mr-2" />
+              Projects</TabsTrigger>
           </TabsList>
           {value === "teams" && <CreateTeam />}
           {value === "projects" && <CreateProject />}
@@ -39,7 +43,7 @@ const Sidebar = () => {
                     variant="ghost"
                     className="w-full h-min py-2 justify-start"
                   >
-                    <DnaIcon className="w-4 h-4 mr-2 text-primary" />
+                    <HeartHandshakeIcon className="w-4 h-4 mr-2 text-primary" />
                     {team.name}
                   </Button>
                 </div>
@@ -56,7 +60,7 @@ const Sidebar = () => {
                     variant="ghost"
                     className="w-full h-min py-2 justify-start"
                   >
-                    <RocketIcon className="w-4 h-4 mr-2 text-primary" />
+                    <FolderKanbanIcon className="w-4 h-4 mr-2 text-primary" />
                     {project.name}
                   </Button>
                 </div>
