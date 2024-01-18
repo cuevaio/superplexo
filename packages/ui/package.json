@@ -21,6 +21,7 @@
     "./select": "./src/select.tsx",
     "./separator": "./src/separator.tsx",
     "./slider": "./src/slider.tsx",
+    "./skeleton": "./src/skeleton.tsx",
     "./switch": "./src/switch.tsx",
     "./table": "./src/table.tsx",
     "./tabs": "./src/tabs.tsx",

@@ -16,9 +16,13 @@ const Layout = async ({ user, header, sidebar, children }: LayoutProps) => {
 
   return (
     <div className="h-screen w-screen flex flex-col">
-      <div className="flex w-full border-b">
-        <div className="flex-none w-72 p-4 border-r">{user}</div>
-        <header className="grow p-4">{header}</header>
+      <div className="flex w-full border-b h-16">
+        <div className="flex-none w-72 border-r">{user}</div>
+        <header className="grow px-4 h-full flex items-center">
+          <div className="w-full">
+            {header}
+          </div>
+        </header>
       </div>
 
       <div className="flex h-full w-full">

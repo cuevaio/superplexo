@@ -1,6 +1,6 @@
 const Header = () => {
   return (
-    <div>
+    <div className="my-auto">
       <h1>Header</h1>
     </div>
   );
