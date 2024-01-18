@@ -7,6 +7,7 @@ import { ScrollArea } from "@superplexo/ui/scroll-area";
 import { Button } from "@superplexo/ui/button";
 import React from "react";
 import { CreateProject } from "./create-project";
+import { DnaIcon, RocketIcon } from "lucide-react";
 
 const Sidebar = () => {
   let [value, setValue] = React.useState("teams");
@@ -38,6 +39,7 @@ const Sidebar = () => {
                     variant="ghost"
                     className="w-full h-min py-2 justify-start"
                   >
+                    <DnaIcon className="w-4 h-4 mr-2 text-primary" />
                     {team.name}
                   </Button>
                 </div>
@@ -54,6 +56,7 @@ const Sidebar = () => {
                     variant="ghost"
                     className="w-full h-min py-2 justify-start"
                   >
+                    <RocketIcon className="w-4 h-4 mr-2 text-primary" />
                     {project.name}
                   </Button>
                 </div>
