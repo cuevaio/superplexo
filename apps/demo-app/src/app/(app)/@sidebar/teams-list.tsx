@@ -6,6 +6,7 @@ import { Button } from "@superplexo/ui/button";
 import { ScrollArea } from "@superplexo/ui/scroll-area";
 import { SelectedPick } from "@xata.io/client";
 import { HeartHandshakeIcon } from "lucide-react";
+import { CreateTeam } from "./create-team";
 
 type Props = {
   initialData: Readonly<SelectedPick<TeamsRecord, ["*"]>>[]
@@ -15,7 +16,9 @@ export const TeamsList = ({ initialData }: Props) => {
   let listAllTeams = trpc.listAllTeams.useQuery()
   let teams = listAllTeams.data || initialData || [];
 
-  return (
+  return (<>
+    <CreateTeam />
+
     <ScrollArea className="h-[500px]">
       <div className="pr-4">
         {teams.map((team) => (
@@ -30,6 +33,6 @@ export const TeamsList = ({ initialData }: Props) => {
           </div>
         ))}
       </div>
-    </ScrollArea>
+    </ScrollArea></>
   )
 }

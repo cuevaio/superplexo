@@ -15,21 +15,17 @@ const Sidebar = async () => {
   return (
     <div className="flex flex-col h-full">
       <div className="flex-none h-[300px]">Sidebar</div>
-      <Tabs className="">
-        <div className="w-full flex space-x-4">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="teams">
-              <WaypointsIcon className="w-4 h-4 mr-2" />
-              Teams</TabsTrigger>
-            <TabsTrigger value="projects">
-              <LayoutGridIcon className="w-4 h-4 mr-2" />
-              Projects</TabsTrigger>
-          </TabsList>
-        </div>
+      <Tabs defaultValue="teams" className="relative">
+        <TabsList className="grid w-3/4 grid-cols-2">
+          <TabsTrigger value="teams" className="text-xs">
+            <WaypointsIcon className="w-4 h-4 mr-1" />
+            Teams</TabsTrigger>
+          <TabsTrigger value="projects" className="text-xs">
+            <LayoutGridIcon className="w-4 h-4 mr-1" />
+            Projects</TabsTrigger>
+        </TabsList>
         <TabsContent value="teams" className="">
           <TeamsList initialData={teams} />
-
-
         </TabsContent>
         <TabsContent value="projects" className="">
           <ProjectsList initialData={projects} />

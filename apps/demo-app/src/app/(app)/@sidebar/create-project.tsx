@@ -65,7 +65,7 @@ export const CreateProject = () => {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button size="icon" variant="ghost">
+        <Button size="icon" variant="ghost" className="absolute top-0 right-0">
           <PlusIcon className="h-4 w-4" />
         </Button>
       </DialogTrigger>
