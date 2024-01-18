@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check,  HeartHandshakeIcon, WaypointsIcon } from "lucide-react";
+import { Check, HeartHandshakeIcon, WaypointsIcon } from "lucide-react";
 
 import { cn } from "@superplexo/utils";
 import { Button } from "@superplexo/ui/button";

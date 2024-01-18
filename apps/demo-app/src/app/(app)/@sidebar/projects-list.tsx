@@ -9,7 +9,7 @@ import { FolderKanbanIcon } from "lucide-react";
 import { CreateProject } from "./create-project";
 
 interface Props {
-  initialData: Readonly<SelectedPick<TeamsRecord, ["*"]>>[]
+  initialData: Readonly<SelectedPick<TeamsRecord, ["*"]>>[];
 }
 
 export const ProjectsList = ({ initialData }: Props) => {
@@ -35,5 +35,5 @@ export const ProjectsList = ({ initialData }: Props) => {
         </div>
       </ScrollArea>
     </>
-  )
-}
+  );
+};

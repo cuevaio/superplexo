@@ -9,30 +9,32 @@ import { HeartHandshakeIcon } from "lucide-react";
 import { CreateTeam } from "./create-team";
 
 type Props = {
-  initialData: Readonly<SelectedPick<TeamsRecord, ["*"]>>[]
-}
+  initialData: Readonly<SelectedPick<TeamsRecord, ["*"]>>[];
+};
 
 export const TeamsList = ({ initialData }: Props) => {
-  let listAllTeams = trpc.listAllTeams.useQuery()
+  let listAllTeams = trpc.listAllTeams.useQuery();
   let teams = listAllTeams.data || initialData || [];
 
-  return (<>
-    <CreateTeam />
+  return (
+    <>
+      <CreateTeam />
 
-    <ScrollArea className="h-[500px]">
-      <div className="pr-4">
-        {teams.map((team) => (
-          <div key={team.id}>
-            <Button
-              variant="ghost"
-              className="w-full h-min py-2 justify-start"
-            >
-              <HeartHandshakeIcon className="w-4 h-4 mr-2 text-primary" />
-              {team.name}
-            </Button>
-          </div>
-        ))}
-      </div>
-    </ScrollArea></>
-  )
-}
+      <ScrollArea className="h-[500px]">
+        <div className="pr-4">
+          {teams.map((team) => (
+            <div key={team.id}>
+              <Button
+                variant="ghost"
+                className="w-full h-min py-2 justify-start"
+              >
+                <HeartHandshakeIcon className="w-4 h-4 mr-2 text-primary" />
+                {team.name}
+              </Button>
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
+    </>
+  );
+};

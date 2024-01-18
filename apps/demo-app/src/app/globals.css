@@ -57,7 +57,7 @@
     @apply bg-background text-foreground;
   }
 
-    /* avoid browser autofill background-color change */
+  /* avoid browser autofill background-color change */
   input:-webkit-autofill,
   textarea:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px hsl(var(--bg-background)) inset;

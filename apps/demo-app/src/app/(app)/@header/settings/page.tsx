@@ -7,9 +7,6 @@ const SettingsHeader = () => {
       <ThemeToggle />
     </div>
   );
-}
+};
 
 export default SettingsHeader;
-
-
-
