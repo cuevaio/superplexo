@@ -1,3 +1,6 @@
+export const runtime = 'edge';
+export const preferredRegion = ['iad1'];
+
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
