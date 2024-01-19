@@ -1,5 +1,5 @@
-export const runtime = 'edge';
-export const preferredRegion = ['iad1'];
+export const runtime = "edge";
+export const preferredRegion = ["iad1"];
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@superplexo/ui/tabs";
 import { LayoutGridIcon, WaypointsIcon } from "lucide-react";

@@ -1,12 +1,14 @@
-export const runtime = 'edge';
-export const preferredRegion = ['iad1'];
+export const runtime = "edge";
+export const preferredRegion = ["iad1"];
 
 import { notFound } from "next/navigation";
 import { CopyIcon } from "lucide-react";
-import { getXataClient } from "@/lib/xata";
+import { UsersRecord, getXataClient } from "@/lib/xata";
 import { Button } from "@superplexo/ui/button";
 import { Members } from "./members";
 import { TeamCombobox } from "@/components/team-combobox";
+import { Lead } from "./lead";
+import { SelectedPick } from "@xata.io/client";
 
 let xata = getXataClient();
 
@@ -17,10 +19,17 @@ interface Props {
 }
 
 const ProjectPage = async ({ params }: Props) => {
-  let project = await xata.db.projects.filter({ slug: params.slug }).getFirst();
+  let project = await xata.db.projects
+    .select(["*", "lead.*"])
+    .filter({ slug: params.slug })
+    .getFirst();
   if (!project) {
     return notFound();
   }
+
+  let lead = project.lead
+    ? (project.lead as Readonly<SelectedPick<UsersRecord, ["*"]>>)
+    : undefined;
 
   return (
     <div className="flex h-full">
@@ -42,6 +51,13 @@ const ProjectPage = async ({ params }: Props) => {
           <p className="text-sm text-muted-foreground">{project.slug}</p>
         </div>
         <div className="p-4 space-y-2">
+          <div className="flex items-center space-x-4">
+            <p className="text-sm w-20">Lead</p>
+            <Lead
+              projectSlug={params.slug}
+              initialLead={lead ? JSON.parse(JSON.stringify(lead)) : undefined}
+            />
+          </div>
           <div className="flex items-center space-x-4">
             <p className="text-sm w-20">Members</p>
             <Members

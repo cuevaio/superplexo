@@ -47,23 +47,23 @@ export const teamsProcedures = {
 
       await Promise.all([
         members &&
-        xata.db.team_member_rels.create(
-          members.map((member) => {
-            return {
-              team: team.id,
-              member: member.id,
-            };
-          })
-        ),
+          xata.db.team_member_rels.create(
+            members.map((member) => {
+              return {
+                team: team.id,
+                member: member.id,
+              };
+            })
+          ),
         projects &&
-        xata.db.team_project_rels.create(
-          projects.map((project) => {
-            return {
-              team: team.id,
-              project: project.id,
-            };
-          })
-        ),
+          xata.db.team_project_rels.create(
+            projects.map((project) => {
+              return {
+                team: team.id,
+                project: project.id,
+              };
+            })
+          ),
       ]);
 
       return team.slug;

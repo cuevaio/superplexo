@@ -104,7 +104,9 @@ export const CreateProject = () => {
               Cancel
             </Button>
             <Button type="submit" disabled={createProject.isLoading}>
-              {createProject.isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {createProject.isLoading && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
               Create
             </Button>
           </DialogFooter>

@@ -1,5 +1,5 @@
-export const runtime = 'edge';
-export const preferredRegion = ['iad1'];
+export const runtime = "edge";
+export const preferredRegion = ["iad1"];
 
 import { ProjectCombobox } from "@/components/project-combobox";
 import { getXataClient } from "@/lib/xata";

@@ -89,6 +89,62 @@ export const projectsProcedures = {
     return projects;
   }),
 
+  getProjectLead: protectedProcedure
+    .input(z.object({ projectSlug: z.string() }))
+    .query(async (opts) => {
+      const {
+        input: { projectSlug },
+      } = opts;
+
+      let project = await xata.db.projects
+        .select(["slug", "lead.*"])
+        .filter({ slug: projectSlug })
+        .getFirst();
+      if (!project) throw new TRPCError({ code: "NOT_FOUND" });
+
+      let lead = project.lead
+        ? (project.lead as Readonly<SelectedPick<UsersRecord, ["*"]>>)
+        : undefined;
+
+      return lead;
+    }),
+
+  updateProjectLead: protectedProcedure
+    .input(
+      z.object({
+        projectSlug: z.string(),
+        leadEmail: z.string().email().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const {
+        input: { projectSlug, leadEmail },
+      } = opts;
+
+      let project = await xata.db.projects
+        .select(["slug", "lead.*"])
+        .filter({ slug: projectSlug })
+        .getFirst();
+      if (!project)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Project not found",
+        });
+
+      if (!leadEmail) {
+        await project.update({ lead: null });
+        return true;
+      }
+
+      let lead = await xata.db.users.filter({ email: leadEmail }).getFirst();
+      if (!lead)
+        throw new TRPCError({ code: "NOT_FOUND", message: "Lead not found" });
+
+      await project.update({ lead: lead.id });
+
+      return true;
+    }),
+
   listProjectMembers: protectedProcedure
     .input(z.object({ projectSlug: z.string() }))
     .query(async (opts) => {

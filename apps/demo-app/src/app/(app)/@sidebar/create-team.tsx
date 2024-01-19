@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { toast } from "sonner"
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -94,9 +94,12 @@ export const CreateTeam = () => {
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={createTeam.isLoading} >
-              {createTeam.isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Create</Button>
+            <Button type="submit" disabled={createTeam.isLoading}>
+              {createTeam.isLoading && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Create
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

@@ -23,25 +23,43 @@ import { ScrollArea } from "@superplexo/ui/scroll-area";
 import { SelectedPick } from "@xata.io/client";
 import { UsersRecord } from "@/lib/xata";
 
-interface Props {
-  placeholder: string;
-  multiple?: true;
+type MultipleProps = {
+  multiple: true;
   initialUsers?: Readonly<SelectedPick<UsersRecord, ["*"]>>[];
   initialUsersCount?: number;
   handleOnClose?: (usersEmails: string[]) => void;
-}
+};
+
+type SingleProps = {
+  multiple?: false;
+  initialUser?: Readonly<SelectedPick<UsersRecord, ["*"]>>;
+  handleOnClose?: (userEmail: string | undefined) => void;
+};
+
+type Props = {
+  placeholder: string;
+} & (MultipleProps | SingleProps);
 
 export function UserCombobox(props: Props) {
   const [open, setOpen] = React.useState(false);
   let [selectedEmails, setSelectedEmails] = React.useState<string[]>([]);
 
   let initialSelectedEmails: string[] = [];
-  if (props.initialUsers) {
-    props.initialUsers.forEach((u) => {
-      if (u.email) {
-        initialSelectedEmails.push(u.email);
+
+  if (props.multiple) {
+    if (props.initialUsers) {
+      props.initialUsers.forEach((u) => {
+        if (u.email) {
+          initialSelectedEmails.push(u.email);
+        }
+      });
+    }
+  } else {
+    if (props.initialUser) {
+      if (props.initialUser.email) {
+        initialSelectedEmails.push(props.initialUser.email);
       }
-    });
+    }
   }
 
   // this will help to know if the combobox has been open at least once
@@ -55,23 +73,39 @@ export function UserCombobox(props: Props) {
   }, [open]);
 
   React.useEffect(() => {
-    if (props.initialUsers) {
-      let emails: string[] = [];
-      props.initialUsers.forEach((u) => {
-        if (u.email) {
-          emails.push(u.email);
+    if (props.multiple) {
+      if (props.initialUsers) {
+        let emails: string[] = [];
+        props.initialUsers.forEach((u) => {
+          if (u.email) {
+            emails.push(u.email);
+          }
+        });
+        setSelectedEmails(emails);
+      }
+    } else {
+      if (props.initialUser) {
+        if (props.initialUser.email) {
+          setSelectedEmails([props.initialUser.email]);
         }
-      });
-      setSelectedEmails(emails);
+      }
     }
-  }, [props.initialUsers]);
+  }, [props]);
 
   React.useEffect(() => {
     if (!props.handleOnClose) return;
-    if (initialSelectedEmails.length === selectedEmails.length) return;
+    if (props.multiple) {
+      if (initialSelectedEmails.length === selectedEmails.length) return;
+    }
     if (!hasBeenOpen.current === true) return;
     if (!open) {
-      props.handleOnClose(selectedEmails);
+      if (props.multiple) {
+        props.handleOnClose(selectedEmails);
+      } else {
+        selectedEmails[0]
+          ? props.handleOnClose(selectedEmails[0])
+          : props.handleOnClose(undefined);
+      }
     }
   }, [open]);
 
@@ -92,15 +126,27 @@ export function UserCombobox(props: Props) {
         return a.name.localeCompare(b.name);
       }) || [];
 
-  let placeholder = props.initialUsersCount
-    ? props.initialUsersCount + " users"
-    : props.placeholder;
+  let placeholder = props.placeholder;
+  if (props.multiple) {
+    if (props.initialUsersCount) {
+      placeholder = props.initialUsersCount + " users";
+    }
+  }
+
   if (selectedUsers.length === 1) {
     placeholder = selectedUsers[0]?.name || placeholder;
   } else {
     if (selectedUsers.length > 0) {
       if (props.multiple) {
         placeholder = `${selectedUsers.length} users`;
+      }
+    }
+  }
+
+  if (!props.multiple) {
+    if (props.initialUser) {
+      if (props.initialUser.name) {
+        placeholder = props.initialUser.name;
       }
     }
   }
