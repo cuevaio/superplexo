@@ -75,8 +75,8 @@ export const CreateTeam = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input name="teamName" placeholder="Team name" required />
           <div className="flex flex-row space-x-4">
-            <UserCombobox placeholder="Members" multiple={true} />
-            <ProjectCombobox placeholder="Projects" multiple={true} />
+            <UserCombobox placeholder="Members" multiple />
+            <ProjectCombobox placeholder="Projects" multiple />
           </div>
           <DialogFooter>
             <Button

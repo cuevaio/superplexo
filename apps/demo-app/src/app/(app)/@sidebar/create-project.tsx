@@ -83,9 +83,9 @@ export const CreateProject = () => {
             placeholder="Project description"
           />
           <div className="flex flex-row space-x-4">
-            <UserCombobox placeholder="Lead" multiple={false} />
-            <UserCombobox placeholder="Members" multiple={true} />
-            <TeamCombobox placeholder="Teams" multiple={true} />
+            <UserCombobox placeholder="Lead" />
+            <UserCombobox placeholder="Members" multiple />
+            <TeamCombobox placeholder="Teams" multiple />
           </div>
           <DialogFooter>
             <Button

@@ -23,7 +23,7 @@ import { ScrollArea } from "@superplexo/ui/scroll-area";
 
 interface Props {
   placeholder: string;
-  multiple?: boolean;
+  multiple?: true;
 }
 
 export function ProjectCombobox(props: Props) {

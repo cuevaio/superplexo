@@ -1,7 +1,7 @@
 "use client";
 
 import { trpc } from "@/lib/trpc";
-import { TeamsRecord } from "@/lib/xata";
+import { ProjectsRecord } from "@/lib/xata";
 import { Button } from "@superplexo/ui/button";
 import { ScrollArea } from "@superplexo/ui/scroll-area";
 import { SelectedPick } from "@xata.io/client";
@@ -9,7 +9,7 @@ import { FolderKanbanIcon } from "lucide-react";
 import { CreateProject } from "./create-project";
 
 interface Props {
-  initialData: Readonly<SelectedPick<TeamsRecord, ["*"]>>[];
+  initialData: Readonly<SelectedPick<ProjectsRecord, ["*"]>>[];
 }
 
 export const ProjectsList = ({ initialData }: Props) => {
