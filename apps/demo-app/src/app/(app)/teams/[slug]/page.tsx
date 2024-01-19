@@ -1,3 +1,6 @@
+export const runtime = 'edge';
+export const preferredRegion = ['iad1'];
+
 import { ProjectCombobox } from "@/components/project-combobox";
 import { getXataClient } from "@/lib/xata";
 import { Button } from "@superplexo/ui/button";

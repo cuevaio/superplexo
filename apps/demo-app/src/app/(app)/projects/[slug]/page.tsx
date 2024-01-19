@@ -1,3 +1,6 @@
+export const runtime = 'edge';
+export const preferredRegion = ['iad1'];
+
 import { notFound } from "next/navigation";
 import { CopyIcon } from "lucide-react";
 import { getXataClient } from "@/lib/xata";
