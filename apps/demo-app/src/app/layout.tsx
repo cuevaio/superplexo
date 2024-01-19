@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { cn } from "@superplexo/utils/cn";
 import { Providers } from "./providers";
+import { Toaster } from "@superplexo/ui/sonner";
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -25,6 +26,7 @@ export default function RootLayout({
         className={cn("bg-background font-sans antialiased", fontSans.variable)}
       >
         <Providers>{children}</Providers>
+        <Toaster />
       </body>
     </html>
   );

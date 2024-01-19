@@ -20,15 +20,60 @@ import {
 } from "@superplexo/ui/popover";
 import { trpc } from "@/lib/trpc";
 import { ScrollArea } from "@superplexo/ui/scroll-area";
+import { SelectedPick } from "@xata.io/client";
+import { UsersRecord } from "@/lib/xata";
 
 interface Props {
   placeholder: string;
-  multiple?: boolean;
+  multiple?: true;
+  initialUsers?: Readonly<SelectedPick<UsersRecord, ["*"]>>[];
+  initialUsersCount?: number;
+  handleOnClose?: (usersEmails: string[]) => void;
 }
 
 export function UserCombobox(props: Props) {
   const [open, setOpen] = React.useState(false);
   let [selectedEmails, setSelectedEmails] = React.useState<string[]>([]);
+
+  let initialSelectedEmails: string[] = [];
+  if (props.initialUsers) {
+    props.initialUsers.forEach((u) => {
+      if (u.email) {
+        initialSelectedEmails.push(u.email);
+      }
+    });
+  }
+
+  // this will help to know if the combobox has been open at least once
+  let hasBeenOpen = React.useRef(false);
+
+  React.useEffect(() => {
+    if (hasBeenOpen.current === true) return;
+    if (open) {
+      hasBeenOpen.current = true;
+    }
+  }, [open]);
+
+  React.useEffect(() => {
+    if (props.initialUsers) {
+      let emails: string[] = [];
+      props.initialUsers.forEach((u) => {
+        if (u.email) {
+          emails.push(u.email);
+        }
+      });
+      setSelectedEmails(emails);
+    }
+  }, [props.initialUsers]);
+
+  React.useEffect(() => {
+    if (!props.handleOnClose) return;
+    if (initialSelectedEmails.length === selectedEmails.length) return;
+    if (!hasBeenOpen.current === true) return;
+    if (!open) {
+      props.handleOnClose(selectedEmails);
+    }
+  }, [open]);
 
   let getAllUsers = trpc.listAllUsers.useQuery();
   let users =
@@ -38,15 +83,18 @@ export function UserCombobox(props: Props) {
       return a.name.localeCompare(b.name);
     }) || [];
 
-  let selectedUsers = users
-    .filter((u) => u.email && selectedEmails.includes(u.email))
-    .sort((a, b) => {
-      if (!a.name) return 1;
-      if (!b.name) return -1;
-      return a.name.localeCompare(b.name);
-    });
+  let selectedUsers =
+    users
+      .filter((u) => u.email && selectedEmails.includes(u.email))
+      .sort((a, b) => {
+        if (!a.name) return 1;
+        if (!b.name) return -1;
+        return a.name.localeCompare(b.name);
+      }) || [];
 
-  let placeholder = props.placeholder;
+  let placeholder = props.initialUsersCount
+    ? props.initialUsersCount + " users"
+    : props.placeholder;
   if (selectedUsers.length === 1) {
     placeholder = selectedUsers[0]?.name || placeholder;
   } else {
@@ -63,7 +111,7 @@ export function UserCombobox(props: Props) {
     <Popover open={open} onOpenChange={setOpen} modal={true}>
       <PopoverTrigger asChild>
         <Button
-          variant="secondary"
+          variant="outline"
           role="combobox"
           aria-expanded={open}
           className="text-muted-foreground w-min justify-between tabular-nums py-1 h-min"

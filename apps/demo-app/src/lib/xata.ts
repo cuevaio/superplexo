@@ -88,6 +88,8 @@ const tables = [
         defaultValue: "Default team name",
       },
       { name: "slug", type: "string", unique: true },
+      { name: "membersCount", type: "int", notNull: true, defaultValue: "0" },
+      { name: "projectsCount", type: "int", notNull: true, defaultValue: "0" },
     ],
     revLinks: [
       { column: "team", table: "team_member_rels" },
@@ -108,6 +110,8 @@ const tables = [
       { name: "startedAt", type: "datetime" },
       { name: "endedAt", type: "datetime" },
       { name: "slug", type: "string", unique: true },
+      { name: "membersCount", type: "int", notNull: true, defaultValue: "0" },
+      { name: "teamsCount", type: "int", notNull: true, defaultValue: "0" },
     ],
     revLinks: [
       { column: "project", table: "team_project_rels" },

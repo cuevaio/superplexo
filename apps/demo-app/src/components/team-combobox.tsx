@@ -63,7 +63,7 @@ export function TeamCombobox(props: Props) {
     <Popover open={open} onOpenChange={setOpen} modal={true}>
       <PopoverTrigger asChild>
         <Button
-          variant="secondary"
+          variant="outline"
           role="combobox"
           aria-expanded={open}
           className="text-muted-foreground w-min justify-between tabular-nums py-1 h-min"

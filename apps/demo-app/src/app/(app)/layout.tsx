@@ -25,7 +25,7 @@ const Layout = async ({ user, header, sidebar, children }: LayoutProps) => {
 
       <div className="flex h-full w-full">
         <aside className="flex-none w-72 p-4 border-r">{sidebar}</aside>
-        <div className="grow p-4">{children}</div>
+        <div className="grow">{children}</div>
       </div>
     </div>
   );

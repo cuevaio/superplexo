@@ -1,7 +1,9 @@
 import { z } from "zod";
 import { protectedProcedure } from "../trpc";
 
-import { getXataClient } from "@/lib/xata";
+import { UsersRecord, getXataClient } from "@/lib/xata";
+import { TRPCError } from "@trpc/server";
+import { SelectedPick } from "@xata.io/client";
 let xata = getXataClient();
 
 export const teamsProcedures = {
@@ -24,17 +26,23 @@ export const teamsProcedures = {
         Math.random().toString(36).substring(2, 8);
 
       let [members, projects] = await Promise.all([
-        memberEmails?.length &&
-          memberEmails.length > 0 &&
-          xata.db.users.filter({ email: { $any: memberEmails } }).getAll(),
-        projectSlugs?.length &&
-          projectSlugs.length > 0 &&
-          xata.db.projects.filter({ slug: { $any: projectSlugs } }).getAll(),
+        memberEmails?.length
+          ? memberEmails.length > 0
+            ? xata.db.users.filter({ email: { $any: memberEmails } }).getAll()
+            : []
+          : [],
+        projectSlugs?.length
+          ? projectSlugs.length > 0
+            ? xata.db.projects.filter({ slug: { $any: projectSlugs } }).getAll()
+            : []
+          : [],
       ]);
 
       let team = await xata.db.teams.create({
         name: teamName,
         slug: teamSlug,
+        membersCount: members.length,
+        projectsCount: projects.length,
       });
 
       await Promise.all([
@@ -64,4 +72,116 @@ export const teamsProcedures = {
   listAllTeams: protectedProcedure.query(async () => {
     return await xata.db.teams.sort("name", "asc").getAll();
   }),
+
+  getTeam: protectedProcedure
+    .input(z.object({ teamSlug: z.string() }))
+    .query(async (opts) => {
+      const {
+        input: { teamSlug },
+      } = opts;
+
+      let team = await xata.db.teams.filter({ slug: teamSlug }).getFirst();
+      if (!team) throw new TRPCError({ code: "NOT_FOUND" });
+
+      return team;
+    }),
+
+  listTeamMembers: protectedProcedure
+    .input(z.object({ teamSlug: z.string() }))
+    .query(async (opts) => {
+      const {
+        input: { teamSlug },
+      } = opts;
+
+      let team = await xata.db.teams.filter({ slug: teamSlug }).getFirst();
+      if (!team) throw new TRPCError({ code: "NOT_FOUND" });
+
+      let memberships = await xata.db.team_member_rels
+        .select(["member.*"])
+        .filter({ team: team.id })
+        .sort("member.name", "asc")
+        .getAll();
+
+      let users: Readonly<SelectedPick<UsersRecord, ["*"]>>[] = [];
+
+      for (let membership of memberships) {
+        if (membership.member) {
+          users.push(
+            membership.member as Readonly<SelectedPick<UsersRecord, ["*"]>>
+          );
+        }
+      }
+      return users;
+    }),
+
+  updateTeamMembers: protectedProcedure
+    .input(
+      z.object({
+        teamSlug: z.string(),
+        membersEmails: z.array(z.string().email()),
+      })
+    )
+    .mutation(async (opts) => {
+      const {
+        input: { teamSlug, membersEmails },
+      } = opts;
+
+      let team = await xata.db.teams.filter({ slug: teamSlug }).getFirst();
+      if (!team)
+        throw new TRPCError({ code: "NOT_FOUND", message: "Team not found" });
+
+      let actualMemberships = await xata.db.team_member_rels
+        .select(["id", "member.id", "member.email"])
+        .filter({ team: team.id })
+        .getAll();
+      console.log("actualMemberships", actualMemberships);
+
+      let membershipsToRemove: string[] = []; // the ids of the memberships to remove
+
+      for (let actualMembership of actualMemberships) {
+        if (actualMembership.member) {
+          let member = actualMembership.member as Readonly<
+            SelectedPick<UsersRecord, ["id", "email"]>
+          >;
+
+          if (!member.email) continue;
+
+          if (!membersEmails.includes(member.email)) {
+            membershipsToRemove.push(actualMembership.id); // remove this membership
+          }
+        }
+      }
+
+      let membershipsToAdd: { team: string; member: string }[] = [];
+
+      let emailsToAdd = membersEmails.filter(
+        (email) =>
+          !membershipsToRemove.includes(email) &&
+          !actualMemberships.find((m) => m.member?.email == email)
+      );
+      if (emailsToAdd.length == 0) {
+        await xata.db.team_member_rels.delete(membershipsToRemove);
+        return true;
+      }
+
+      let membersIdsToAdd = await xata.db.users
+        .filter({ email: { $any: emailsToAdd } })
+        .select(["id"])
+        .getAll();
+      for (let memberId of membersIdsToAdd) {
+        membershipsToAdd.push({ team: team.id, member: memberId.id });
+      }
+
+      let deleted = await xata.db.team_member_rels.delete(membershipsToRemove);
+      console.log("deleted", deleted);
+      let created = await xata.db.team_member_rels.create(membershipsToAdd);
+      console.log("created", created);
+
+      let newMembersCount =
+        actualMemberships.length - deleted.length + created.length;
+
+      await team.update({ membersCount: newMembersCount });
+
+      return true;
+    }),
 };

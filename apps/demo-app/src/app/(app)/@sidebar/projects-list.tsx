@@ -21,17 +21,23 @@ export const ProjectsList = ({ initialData }: Props) => {
       <CreateProject />
       <ScrollArea className="h-[500px]">
         <div className="pr-4">
-          {projects.map((project) => (
-            <div key={project.id}>
-              <Button
-                variant="ghost"
-                className="w-full h-min py-2 justify-start"
-              >
-                <FolderKanbanIcon className="w-4 h-4 mr-2 text-primary" />
-                {project.name}
-              </Button>
-            </div>
-          ))}
+          {projects
+            .sort((a, b) => {
+              if (!a.name) return 1;
+              if (!b.name) return -1;
+              return a.name.localeCompare(b.name);
+            })
+            .map((project) => (
+              <div key={project.id}>
+                <Button
+                  variant="ghost"
+                  className="w-full h-min py-2 justify-start"
+                >
+                  <FolderKanbanIcon className="w-4 h-4 mr-2 text-primary" />
+                  {project.name}
+                </Button>
+              </div>
+            ))}
         </div>
       </ScrollArea>
     </>
