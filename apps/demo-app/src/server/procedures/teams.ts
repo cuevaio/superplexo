@@ -29,41 +29,41 @@ export const teamsProcedures = {
         memberEmails?.length
           ? memberEmails.length > 0
             ? xata.db.users.filter({ email: { $any: memberEmails } }).getAll()
-            : []
-          : [],
+            : undefined
+          : undefined,
         projectSlugs?.length
           ? projectSlugs.length > 0
             ? xata.db.projects.filter({ slug: { $any: projectSlugs } }).getAll()
-            : []
-          : [],
+            : undefined
+          : undefined,
       ]);
 
       let team = await xata.db.teams.create({
         name: teamName,
         slug: teamSlug,
-        membersCount: members.length,
-        projectsCount: projects.length,
+        membersCount: members?.length,
+        projectsCount: projects?.length,
       });
 
       await Promise.all([
         members &&
-          xata.db.team_member_rels.create(
-            members.map((member) => {
-              return {
-                team: team.id,
-                member: member.id,
-              };
-            })
-          ),
+        xata.db.team_member_rels.create(
+          members.map((member) => {
+            return {
+              team: team.id,
+              member: member.id,
+            };
+          })
+        ),
         projects &&
-          xata.db.team_project_rels.create(
-            projects.map((project) => {
-              return {
-                team: team.id,
-                project: project.id,
-              };
-            })
-          ),
+        xata.db.team_project_rels.create(
+          projects.map((project) => {
+            return {
+              team: team.id,
+              project: project.id,
+            };
+          })
+        ),
       ]);
 
       return team;
@@ -134,7 +134,6 @@ export const teamsProcedures = {
         .select(["id", "member.id", "member.email"])
         .filter({ team: team.id })
         .getAll();
-      console.log("actualMemberships", actualMemberships);
 
       let membershipsToRemove: string[] = []; // the ids of the memberships to remove
 
@@ -159,10 +158,6 @@ export const teamsProcedures = {
           !membershipsToRemove.includes(email) &&
           !actualMemberships.find((m) => m.member?.email == email)
       );
-      if (emailsToAdd.length == 0) {
-        await xata.db.team_member_rels.delete(membershipsToRemove);
-        return true;
-      }
 
       let membersIdsToAdd = await xata.db.users
         .filter({ email: { $any: emailsToAdd } })
@@ -172,10 +167,8 @@ export const teamsProcedures = {
         membershipsToAdd.push({ team: team.id, member: memberId.id });
       }
 
-      let deleted = await xata.db.team_member_rels.delete(membershipsToRemove);
-      console.log("deleted", deleted);
-      let created = await xata.db.team_member_rels.create(membershipsToAdd);
-      console.log("created", created);
+      let deleted = membershipsToRemove ? await xata.db.team_member_rels.delete(membershipsToRemove) : [];
+      let created = membershipsToAdd ? await xata.db.team_member_rels.create(membershipsToAdd) : [];
 
       let newMembersCount =
         actualMemberships.length - deleted.length + created.length;

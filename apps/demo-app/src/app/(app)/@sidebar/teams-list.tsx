@@ -35,7 +35,7 @@ export const TeamsList = ({ initialData }: Props) => {
                   className="w-full h-min py-2 justify-start"
                   asChild
                 >
-                  <Link href={`/teams/${team.slug}`} className="w-full h-full">
+                  <Link href={`/teams/${team.slug}`}>
                     <HeartHandshakeIcon className="w-4 h-4 mr-2 text-primary" />
                     {team.name}
                   </Link>

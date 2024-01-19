@@ -7,6 +7,7 @@ import { ScrollArea } from "@superplexo/ui/scroll-area";
 import { SelectedPick } from "@xata.io/client";
 import { FolderKanbanIcon } from "lucide-react";
 import { CreateProject } from "./create-project";
+import Link from "next/link";
 
 interface Props {
   initialData: Readonly<SelectedPick<ProjectsRecord, ["*"]>>[];
@@ -32,9 +33,12 @@ export const ProjectsList = ({ initialData }: Props) => {
                 <Button
                   variant="ghost"
                   className="w-full h-min py-2 justify-start"
+                  asChild
                 >
+                <Link href={`/projects/${project.slug}`}>
                   <FolderKanbanIcon className="w-4 h-4 mr-2 text-primary" />
                   {project.name}
+                </Link>
                 </Button>
               </div>
             ))}
