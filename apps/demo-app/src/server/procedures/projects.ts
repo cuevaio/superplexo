@@ -81,7 +81,7 @@ export const projectsProcedures = {
           ),
       ]);
 
-      return project;
+      return project.slug;
     }),
 
   listAllProjects: protectedProcedure.query(async () => {

@@ -17,7 +17,7 @@ import { Button } from "@superplexo/ui/button";
 import { trpc } from "@/lib/trpc";
 import { UserCombobox } from "@/components/user-combobox";
 import { ProjectCombobox } from "@/components/project-combobox";
-import { PlusIcon } from "lucide-react";
+import { Loader2, PlusIcon } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
 import { useRouter } from "next/navigation";
@@ -90,10 +90,13 @@ export const CreateTeam = () => {
               onClick={() => {
                 setDialogOpen(false);
               }}
+              disabled={createTeam.isLoading}
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={createTeam.isLoading} >Create</Button>
+            <Button type="submit" disabled={createTeam.isLoading} >
+              {createTeam.isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Create</Button>
           </DialogFooter>
         </form>
       </DialogContent>

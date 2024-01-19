@@ -16,21 +16,28 @@ import { Input } from "@superplexo/ui/input";
 import { Button } from "@superplexo/ui/button";
 import { trpc } from "@/lib/trpc";
 import { UserCombobox } from "@/components/user-combobox";
-import { PlusIcon } from "lucide-react";
+import { Loader2, PlusIcon } from "lucide-react";
 import { TeamCombobox } from "@/components/team-combobox";
 import { Textarea } from "@superplexo/ui/textarea";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export const CreateProject = () => {
   let [dialogOpen, setDialogOpen] = React.useState(false);
   let queryClient = useQueryClient();
   let listAllProjectsKey = getQueryKey(trpc.listAllProjects);
-
+  let router = useRouter();
   let createProject = trpc.createProject.useMutation({
-    onSuccess: () => {
+    onSuccess: (projectSlug) => {
       setDialogOpen(false);
       queryClient.invalidateQueries(listAllProjectsKey);
+      toast.success("Project created");
+      router.push("/projects/" + projectSlug);
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
@@ -40,7 +47,6 @@ export const CreateProject = () => {
     let formData = new FormData(form);
     let projectName = formData.get("projectName");
     if (!projectName) {
-      // TODO: Toast error
       return;
     }
 
@@ -93,10 +99,14 @@ export const CreateProject = () => {
               onClick={() => {
                 setDialogOpen(false);
               }}
+              disabled={createProject.isLoading}
             >
               Cancel
             </Button>
-            <Button type="submit">Create</Button>
+            <Button type="submit" disabled={createProject.isLoading}>
+              {createProject.isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Create
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
