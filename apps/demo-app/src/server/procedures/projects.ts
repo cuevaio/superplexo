@@ -62,23 +62,23 @@ export const projectsProcedures = {
 
       await Promise.all([
         members &&
-        xata.db.project_member_rels.create(
-          members.map((member) => {
-            return {
-              project: project.id,
-              member: member.id,
-            };
-          })
-        ),
+          xata.db.project_member_rels.create(
+            members.map((member) => {
+              return {
+                project: project.id,
+                member: member.id,
+              };
+            })
+          ),
         teams &&
-        xata.db.team_project_rels.create(
-          teams.map((team) => {
-            return {
-              team: team.id,
-              project: project.id,
-            };
-          })
-        ),
+          xata.db.team_project_rels.create(
+            teams.map((team) => {
+              return {
+                team: team.id,
+                project: project.id,
+              };
+            })
+          ),
       ]);
 
       return project;
@@ -96,7 +96,9 @@ export const projectsProcedures = {
         input: { projectSlug },
       } = opts;
 
-      let project = await xata.db.projects.filter({ slug: projectSlug }).getFirst();
+      let project = await xata.db.projects
+        .filter({ slug: projectSlug })
+        .getFirst();
       if (!project) throw new TRPCError({ code: "NOT_FOUND" });
 
       let memberships = await xata.db.project_member_rels
@@ -129,9 +131,14 @@ export const projectsProcedures = {
         input: { projectSlug, membersEmails },
       } = opts;
 
-      let project = await xata.db.projects.filter({ slug: projectSlug }).getFirst();
+      let project = await xata.db.projects
+        .filter({ slug: projectSlug })
+        .getFirst();
       if (!project)
-        throw new TRPCError({ code: "NOT_FOUND", message: "Project not found" });
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Project not found",
+        });
 
       let actualMemberships = await xata.db.project_member_rels
         .select(["id", "member.id", "member.email"])
@@ -170,8 +177,14 @@ export const projectsProcedures = {
         membershipsToAdd.push({ project: project.id, member: memberId.id });
       }
 
-      let deleted = membershipsToRemove.length > 0 ? await xata.db.project_member_rels.delete(membershipsToRemove) : [];
-      let created = membershipsToAdd.length > 0 ? await xata.db.project_member_rels.create(membershipsToAdd) : [];
+      let deleted =
+        membershipsToRemove.length > 0
+          ? await xata.db.project_member_rels.delete(membershipsToRemove)
+          : [];
+      let created =
+        membershipsToAdd.length > 0
+          ? await xata.db.project_member_rels.create(membershipsToAdd)
+          : [];
 
       let newMembersCount =
         actualMemberships.length - deleted.length + created.length;

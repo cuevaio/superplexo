@@ -35,10 +35,14 @@ export const ProjectsList = ({ initialData }: Props) => {
                   className="w-full h-min py-2 justify-start"
                   asChild
                 >
-                <Link href={`/projects/${project.slug}`}>
-                  <FolderKanbanIcon className="w-4 h-4 mr-2 text-primary" />
-                  {project.name}
-                </Link>
+                  <Link href={`/projects/${project.slug}`}>
+                    <FolderKanbanIcon className="w-4 h-4 mr-2 text-primary" />
+                    <span>
+                      {project.name.length > 20
+                        ? project.name.slice(0, 20) + "..."
+                        : project.name}
+                    </span>
+                  </Link>
                 </Button>
               </div>
             ))}

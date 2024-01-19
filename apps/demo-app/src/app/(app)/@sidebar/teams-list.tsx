@@ -37,7 +37,11 @@ export const TeamsList = ({ initialData }: Props) => {
                 >
                   <Link href={`/teams/${team.slug}`}>
                     <HeartHandshakeIcon className="w-4 h-4 mr-2 text-primary" />
-                    {team.name}
+                    <span>
+                      {team.name.length > 20
+                        ? team.name.slice(0, 20) + "..."
+                        : team.name}
+                    </span>
                   </Link>
                 </Button>
               </div>

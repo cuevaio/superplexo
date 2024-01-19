@@ -14,7 +14,9 @@ interface Props {
 export const Members = ({ initialMembersCount, projectSlug }: Props) => {
   let listProjectMembers = trpc.listProjectMembers.useQuery({ projectSlug });
   let queryClient = useQueryClient();
-  let listProjectMembersKey = getQueryKey(trpc.listProjectMembers, { projectSlug });
+  let listProjectMembersKey = getQueryKey(trpc.listProjectMembers, {
+    projectSlug,
+  });
 
   let updateProjectMembers = trpc.updateProjectMembers.useMutation({
     onSuccess: () => {
