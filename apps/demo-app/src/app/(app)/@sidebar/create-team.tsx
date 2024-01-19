@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-
+import { toast } from "sonner"
 import {
   Dialog,
   DialogContent,
@@ -20,17 +20,24 @@ import { ProjectCombobox } from "@/components/project-combobox";
 import { PlusIcon } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
+import { useRouter } from "next/navigation";
 
 export const CreateTeam = () => {
   let [dialogOpen, setDialogOpen] = React.useState(false);
 
   let queryClient = useQueryClient();
   let listAllTeamsKey = getQueryKey(trpc.listAllTeams);
+  let router = useRouter();
 
   let createTeam = trpc.createTeam.useMutation({
-    onSuccess: () => {
+    onSuccess: (teamSlug) => {
       setDialogOpen(false);
       queryClient.invalidateQueries(listAllTeamsKey);
+      toast.success("Team created");
+      router.push("/teams/" + teamSlug);
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
@@ -40,7 +47,6 @@ export const CreateTeam = () => {
     let formData = new FormData(form);
     let teamName = formData.get("teamName");
     if (!teamName) {
-      // TODO: Toast error
       return;
     }
 
@@ -87,7 +93,7 @@ export const CreateTeam = () => {
             >
               Cancel
             </Button>
-            <Button type="submit">Create</Button>
+            <Button type="submit" disabled={createTeam.isLoading} >Create</Button>
           </DialogFooter>
         </form>
       </DialogContent>

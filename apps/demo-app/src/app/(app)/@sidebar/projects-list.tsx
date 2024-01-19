@@ -20,8 +20,8 @@ export const ProjectsList = ({ initialData }: Props) => {
   return (
     <>
       <CreateProject />
-      <ScrollArea className="h-[500px]">
-        <div className="pr-4">
+      <ScrollArea className="h-[500px] w-full -mx-2">
+        <div className="w-full px-2 py-1 space-y-1">
           {projects
             .sort((a, b) => {
               if (!a.name) return 1;
@@ -32,14 +32,14 @@ export const ProjectsList = ({ initialData }: Props) => {
               <div key={project.id}>
                 <Button
                   variant="ghost"
-                  className="w-full h-min py-2 justify-start"
+                  className="w-[90%] h-8 justify-start"
                   asChild
                 >
                   <Link href={`/projects/${project.slug}`}>
                     <FolderKanbanIcon className="w-4 h-4 mr-2 text-primary" />
                     <span>
                       {project.name.length > 20
-                        ? project.name.slice(0, 20) + "..."
+                        ? project.name.slice(0, 18) + "..."
                         : project.name}
                     </span>
                   </Link>

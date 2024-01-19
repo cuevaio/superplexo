@@ -20,8 +20,8 @@ export const TeamsList = ({ initialData }: Props) => {
   return (
     <>
       <CreateTeam />
-      <ScrollArea className="h-[500px]">
-        <div className="pr-4">
+      <ScrollArea className="h-[500px] w-full -mx-2">
+        <div className="w-full px-2 py-1 space-y-1">
           {teams
             .sort((a, b) => {
               if (!a.name) return 1;
@@ -29,22 +29,21 @@ export const TeamsList = ({ initialData }: Props) => {
               return a.name.localeCompare(b.name);
             })
             .map((team) => (
-              <div key={team.id}>
-                <Button
-                  variant="ghost"
-                  className="w-full h-min py-2 justify-start"
-                  asChild
-                >
-                  <Link href={`/teams/${team.slug}`}>
-                    <HeartHandshakeIcon className="w-4 h-4 mr-2 text-primary" />
-                    <span>
-                      {team.name.length > 20
-                        ? team.name.slice(0, 20) + "..."
-                        : team.name}
-                    </span>
-                  </Link>
-                </Button>
-              </div>
+              <Button
+                key={team.id}
+                variant="ghost"
+                className="w-[90%] h-8 justify-start"
+                asChild
+              >
+                <Link href={`/teams/${team.slug}`}>
+                  <HeartHandshakeIcon className="w-4 h-4 mr-2 text-primary" />
+                  <span>
+                    {team.name.length > 20
+                      ? team.name.slice(0, 18) + "..."
+                      : team.name}
+                  </span>
+                </Link>
+              </Button>
             ))}
         </div>
       </ScrollArea>

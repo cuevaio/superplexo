@@ -19,7 +19,7 @@ const Sidebar = async () => {
     <div className="flex flex-col h-full">
       <div className="flex-none h-[300px]">Sidebar</div>
       <Tabs defaultValue="teams" className="relative">
-        <TabsList className="grid w-3/4 grid-cols-2">
+        <TabsList className="grid w-[80%] grid-cols-2">
           <TabsTrigger value="teams" className="text-xs">
             <WaypointsIcon className="w-4 h-4 mr-1" />
             Teams
@@ -30,10 +30,10 @@ const Sidebar = async () => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="teams" className="">
-          <TeamsList initialData={teams} />
+          <TeamsList initialData={JSON.parse(JSON.stringify(teams))} />
         </TabsContent>
         <TabsContent value="projects" className="">
-          <ProjectsList initialData={projects} />
+          <ProjectsList initialData={JSON.parse(JSON.stringify(projects))} />
         </TabsContent>
       </Tabs>
     </div>
