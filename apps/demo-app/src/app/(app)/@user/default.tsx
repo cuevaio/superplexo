@@ -1,60 +1,25 @@
-"use client";
+import { auth } from "@/auth";
+import { UsersRecord, getXataClient } from "@/lib/xata";
+import { User } from "./user";
+import { SelectedPick } from "@xata.io/client";
+let xata = getXataClient();
 
-import { useUser } from "@/hooks/use-user";
+const UserPage = async () => {
+  let session = await auth();
+  if (!session) throw new Error("Not authenticated");
+  if (!session.user) throw new Error("No user");
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@superplexo/ui/popover";
-import { Button } from "@superplexo/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@superplexo/ui/avatar";
-import Link from "next/link";
-import { Skeleton } from "@superplexo/ui/skeleton";
+  let user = await xata.db.users
+    .filter({ email: session.user.email })
+    .getFirst();
 
-const User = () => {
-  let { user, isLoading } = useUser();
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant="ghost"
-          className="rounded-none w-full h-full space-x-4 justify-start"
-        >
-          <Avatar>
-            <AvatarImage
-              src={user?.actualImage?.url || undefined}
-              alt="Profile picture"
-            />
-            <AvatarFallback>{user?.name?.[0]}</AvatarFallback>
-          </Avatar>
-          {isLoading ? (
-            <div className="flex flex-col items-start justify-center space-y-2">
-              <Skeleton className="w-24 h-3" />
-              <Skeleton className="w-48 h-3" />
-            </div>
-          ) : (
-            <div className="flex flex-col items-start justify-center space-y-0.5">
-              <p className="text-sm font-medium">{user?.name}</p>
-              <p className="text-xs font-normal text-muted-foreground">
-                {user?.email}
-              </p>
-            </div>
-          )}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent align="end" className="w-32 p-1">
-        <div className="flex flex-col items-center justify-center space-y-1">
-          <Button variant="ghost" className="w-full" asChild>
-            <Link href="/settings">Settings</Link>
-          </Button>
-          <Button variant="ghost" className="w-full" asChild>
-            <Link href="/api/auth/signout">Logout</Link>
-          </Button>
-        </div>
-      </PopoverContent>
-    </Popover>
-  );
+  if (!user) throw new Error("User not found");
+
+  let readonlyUser = JSON.parse(JSON.stringify(user)) as Readonly<
+    SelectedPick<UsersRecord, ["*"]>
+  >;
+
+  return <User initialUser={readonlyUser} />;
 };
 
-export default User;
+export default UserPage;
